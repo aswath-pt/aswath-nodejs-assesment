@@ -12,7 +12,7 @@ env:
 
 jobs:
   tfsec:
-    name: Run tfsec sarif report
+    name: TFSEC QUALITY SCAN
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -33,11 +33,11 @@ jobs:
         with:
             # Path to SARIF file relative to the root of the repository
             sarif_file: tfsec.sarif
-            
+
   terraform_primary:
     name: 'Terraform - Primary region'
     runs-on: self-hosted
-
+    needs: tfsec
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v2
