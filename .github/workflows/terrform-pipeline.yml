@@ -54,6 +54,6 @@ jobs:
         run: terraform plan --var-file=infra-vars/assesment-dev-use2.tfvars
         continue-on-error: false
 
-      # - name: 'Terraform Apply'
-      #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      #   run: terraform apply -auto-approve -no-color
+      - name: 'Terraform Apply'
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform plan --var-file=infra-vars/assesment-dev-use2.tfvars
