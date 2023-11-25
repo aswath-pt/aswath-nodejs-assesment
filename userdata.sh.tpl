@@ -12,7 +12,7 @@ cd ${app_path}
 sudo echo "
  PORT=${port}
  S3_REGION=${region}
- S3_BUCKET=${s3_name}"
+ S3_BUCKET=${s3_name}" > .env
 sudo npm install express dotenv formidable @aws-sdk/lib-storage @aws-sdk/client-s3
 sudo nohup node index.js &
 
