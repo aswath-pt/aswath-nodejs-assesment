@@ -23,9 +23,9 @@ resource "aws_internet_gateway" "my_igw" {
 
 # Create two public subnets in different availability zones and associate them with the public route table
 resource "aws_subnet" "public" {
-  count             = length(var.subnet_cidr.services_subnets.public)
+  count             = var.public_subnets_count
   vpc_id            = aws_vpc.vpc.id
-  cidr_block        = var.subnet_cidr.services_subnets.public[count.index]
+  cidr_block        = var.public_subnets_cidrs[count.index]
   availability_zone = length(regexall("^[a-z]{2}-", element(data.aws_availability_zones.available.names, count.index))) > 0 ? element(data.aws_availability_zones.available.names, count.index) : null
   tags = {
       "Name"        = format("${var.env}-subnet-public-%s", element(data.aws_availability_zones.available.names, count.index), )
@@ -34,9 +34,9 @@ resource "aws_subnet" "public" {
 }
 
 resource "aws_subnet" "private" {
-  count             = length(var.subnet_cidr.services_subnets.private)
+  count             = var.private_subnets_count
   vpc_id            = aws_vpc.vpc.id
-  cidr_block        = var.subnet_cidr.services_subnets.private[count.index]
+  cidr_block        = var.private_subnets_cidrs[count.index]
   availability_zone = length(regexall("^[a-z]{2}-", element(data.aws_availability_zones.available.names, count.index))) > 0 ? element(data.aws_availability_zones.available.names, count.index) : null
   tags = {
       "Name"        = format("${var.env}-subnet-private-%s", element(data.aws_availability_zones.available.names, count.index), )
