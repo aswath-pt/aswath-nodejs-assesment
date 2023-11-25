@@ -11,8 +11,8 @@ env:
   TF_ACTION_WORKING_DIR: '.'
 
 jobs:
-  terraform:
-    name: 'Terraform'
+  terraform_primary:
+    name: 'Terraform - Primary region'
     runs-on: self-hosted
 
     steps:
@@ -21,7 +21,28 @@ jobs:
 
       - name: 'Terraform Init'
         id: init
-        run: terraform init
+        run: terraform init --backend-config=backend-vars/backend-dev-use1.tfvars
+
+      - name: 'Terraform Plan'
+        id: plan
+        run: terraform plan --var-file=infra-vars/assesment-dev-use1.tfvars -no-color
+        continue-on-error: false
+
+      - name: 'Terraform Apply'
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform plan --var-file=infra-vars/assesment-dev-use1.tfvars -no-color
+
+  terraform_secondary:
+    name: 'Terraform - Secondary region'
+    runs-on: self-hosted
+
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v2
+
+      - name: 'Terraform Init'
+        id: init
+        run: terraform init --backend-config=backend-vars/backend-dev-use2.tfvars
 
       - name: 'Terraform Validate'
         id: validate
