@@ -4,4 +4,4 @@ terraform*
 .terraform
 .terraform*
 *.lock
-
+*.pem

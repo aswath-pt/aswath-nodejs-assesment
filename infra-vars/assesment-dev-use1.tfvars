@@ -3,11 +3,11 @@ region   = "us-east-1"
 env      = "dev"
 repo     = "https://github.com/aswath-pt/node-s3-upload.git"
 app_path = "node-s3-upload"
-
+app_name = "nodejs"
 
 #Networking
 vpc_cidr = "10.3.0.0/16"
-subnet_cidr = {
+subnet_cidrs = {
   services_subnets = {
     private = ["10.3.112.0/20", "10.3.128.0/20"]
     public  = ["10.3.160.0/20", "10.3.176.0/20"]
@@ -24,7 +24,7 @@ asg_max_size                    = 1
 asg_desired_size                = 1
 health_check_type               = "ELB"
 drop_invalid_header_fields      = true
-internal_loadbalancer           = true
+internal_loadbalancer           = false
 load_balancer_type              = "application"
 target_grp_type                 = "instance"
 target_grp_port                 = "5000"

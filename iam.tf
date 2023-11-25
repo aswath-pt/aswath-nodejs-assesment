@@ -41,7 +41,17 @@ resource "aws_iam_role_policy" "policy" {
       "Effect": "Allow",
       "Action": ["ssm:StartSession"],
       "Resource": ["*"]
-    }
+    },
+     {
+            "Sid": "KMSAllow",
+            "Action": [
+                "kms:Decrypt",
+                "kms:Encrypt",
+                "kms:GenerateDataKey"
+            ],
+            "Effect": "Allow",
+            "Resource": "${aws_kms_key.mykey.arn}"
+        }
   ]
 }
 EOF
