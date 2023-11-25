@@ -1,5 +1,4 @@
 #!/bin/bash
-#Set Variables
 
 # Install dependencies
 sudo yum update
@@ -10,6 +9,11 @@ sudo yum install nodejs -y --setopt=nodesource-nodejs.module_hotfixes=1
 #Application run
 git clone ${repo}
 cd ${app_path}
-sudo npm install
-sudo nohup npm start &
+sudo echo "
+ PORT=${port}
+ S3_REGION=${region}
+ S3_BUCKET=${s3_name}" > .env
+sudo npm install express dotenv formidable @aws-sdk/lib-storage @aws-sdk/client-s3
+sudo nohup node index.js &
+
 

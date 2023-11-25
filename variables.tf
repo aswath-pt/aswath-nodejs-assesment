@@ -1,21 +1,21 @@
 variable "region" {
-  type = string
+  type    = string
   default = "us-east-1"
 }
 variable "env" {
-    type = string
-    default = "test"
+  type    = string
+  default = "test"
 }
 variable "app_name" {
-  type = string
+  type    = string
   default = "sandbox"
 }
 variable "vpc_cidr" {
-  type = string
+  type    = string
   default = "10.0.0.0/16"
 }
 
-variable "subnet_cidr" {
+variable "subnet_cidrs" {
   description = "Subnet CIDR block for subnets"
   type = object({
     services_subnets = object({
@@ -31,9 +31,13 @@ variable "subnet_cidr" {
   }
 }
 
-variable "instance_type" {
-    type = string
-    default = "t2.micro"
+variable "enable_dns_support" {
+  type    = bool
+  default = true
+}
+variable "enable_dns_hostnames" {
+  type    = bool
+  default = true
 }
 
 variable "app_path" {
@@ -41,4 +45,84 @@ variable "app_path" {
 }
 variable "repo" {
   type = string
+}
+
+variable "instance_type" {
+  description = "The type of instance to start"
+  default     = "t2.micro"
+}
+
+variable "asg_min_size" {
+  description = "Minimum size of the Auto Scaling Group"
+  default     = 1
+}
+
+variable "asg_max_size" {
+  description = "Maximum size of the Auto Scaling Group"
+  default     = 1
+}
+
+variable "asg_desired_size" {
+  description = "Desired number of instances in the Auto Scaling Group"
+  default     = 1
+}
+
+variable "health_check_type" {
+  description = "Controls how health checking is done"
+  default     = "ELB"
+}
+
+variable "drop_invalid_header_fields" {
+  description = "Indicates whether invalid header fields are dropped"
+  default     = true
+}
+
+variable "internal_loadbalancer" {
+  description = "If true, the load balancer will be internal"
+  default     = true
+}
+
+variable "load_balancer_type" {
+  description = "The type of load balancer to create"
+  default     = "application"
+}
+
+variable "target_grp_type" {
+  description = "The type of target that traffic is routed to"
+  default     = "instance"
+}
+
+variable "target_grp_port" {
+  description = "The port on which targets receive traffic"
+  default     = "5000"
+}
+
+variable "target_grp_healthcheck_path" {
+  description = "The destination for the health check request"
+  default     = "/"
+}
+
+variable "target_grp_healthcheck_protocol" {
+  description = "The protocol to use to connect with the target"
+  default     = "HTTP"
+}
+
+variable "target_grp_protocol" {
+  description = "The protocol to use to route traffic to the targets"
+  default     = "HTTP"
+}
+
+variable "alb_listner_port" {
+  description = "The port on which the load balancer is listening"
+  default     = 443
+}
+
+variable "alb_listner_protocol" {
+  description = "The protocol for connections from clients to the load balancer"
+  default     = "HTTPS"
+}
+
+variable "custom_domain_name" {
+  description = "Custom domain for fetching ACM certs"
+  type        = string
 }
