@@ -1,5 +1,5 @@
 region = "us-east-1"
-env = "sandbox"
+env = "dev"
 vpc_cidr         = "10.3.0.0/16"
 subnet_cidr = {
   services_subnets = {
@@ -8,4 +8,5 @@ subnet_cidr = {
   }
 }
 
-
+repo = "https://github.com/aswath-pt/node-js-sample.git"
+app_path = "node-js-sample"

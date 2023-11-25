@@ -1,4 +1,4 @@
- # Define the provider and the region
+# Define the provider and the region
 provider "aws" {
   region = var.region
 }

@@ -1,19 +1,19 @@
 
 # Create a VPC with a CIDR block
 resource "aws_vpc" "vpc" {
-  cidr_block = var.vpc_cidr
-  enable_dns_support = "true"
+  cidr_block           = var.vpc_cidr
+  enable_dns_support   = "true"
   enable_dns_hostnames = "true"
   tags = {
-    Name = "${local.env}-VPC-${local.region}"
+    Name = "${local.resource_prefix}-VPC"
   }
-  }
+}
 
 # Create an internet gateway and attach it to the VPC
 resource "aws_internet_gateway" "my_igw" {
   vpc_id = aws_vpc.vpc.id
   tags = {
-    Name = "${local.env}-IG-${local.region}"
+    Name = "${local.resource_prefix}-IG"
   }
 }
 
@@ -21,15 +21,15 @@ resource "aws_internet_gateway" "my_igw" {
 
 # Create two public subnets in different availability zones and associate them with the public route table
 resource "aws_subnet" "public" {
-  count             =length(var.subnet_cidr.services_subnets.public)
+  count             = length(var.subnet_cidr.services_subnets.public)
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.subnet_cidr.services_subnets.public[count.index]
   availability_zone = length(regexall("^[a-z]{2}-", element(data.aws_availability_zones.available.names, count.index))) > 0 ? element(data.aws_availability_zones.available.names, count.index) : null
   tags = merge(
     local.predefined-tags,
     {
-      "Name"                                        = format("${local.env}-subnet-public-%s", element(data.aws_availability_zones.available.names, count.index), )
-      "subnet-type"                                 = "public"
+      "Name"        = format("${local.env}-subnet-public-%s", element(data.aws_availability_zones.available.names, count.index), )
+      "subnet-type" = "public"
     }
   )
 }
@@ -42,8 +42,8 @@ resource "aws_subnet" "private" {
   tags = merge(
     local.predefined-tags,
     {
-      "Name"                                        = format("${local.env}-subnet-private-%s", element(data.aws_availability_zones.available.names, count.index), )
-      "subnet-type"                                 = "private"
+      "Name"        = format("${local.env}-subnet-private-%s", element(data.aws_availability_zones.available.names, count.index), )
+      "subnet-type" = "private"
     }
   )
 }
@@ -52,28 +52,28 @@ resource "aws_subnet" "private" {
 resource "aws_eip" "my_eip" {
   vpc = true
   tags = {
-    Name = "${local.env}-EIP-${local.region}"
+    Name = "${local.resource_prefix}-EIP"
   }
 }
 
 resource "aws_nat_gateway" "my_nat" {
   allocation_id = aws_eip.my_eip.id
-  subnet_id = aws_subnet.public[0].id
+  subnet_id     = aws_subnet.public[0].id
   tags = {
-    Name = "${local.env}-NATG-${local.region}"
-}
+    Name = "${local.resource_prefix}-NATG"
+  }
 }
 
 
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.vpc.id
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.my_nat.id
   }
   tags = merge(
     {
-      "Name" = "${local.env}-RT-${local.region}-private"
+      "Name"        = "${local.resource_prefix}-RT-private"
       "subnet-type" = "private"
     }
   )
@@ -88,20 +88,20 @@ resource "aws_route_table" "public" {
   }
   tags = merge(
     {
-      "Name" = "${local.env}-RT-${local.region}-public"
+      "Name"        = "${local.resource_prefix}-RT-public"
       "subnet-type" = "public"
     }
   )
 }
 
 resource "aws_route_table_association" "private" {
-  count = length(var.subnet_cidr.services_subnets.private)
+  count          = length(var.subnet_cidr.services_subnets.private)
   subnet_id      = element(aws_subnet.private.*.id, count.index)
   route_table_id = aws_route_table.private.id
 }
 
 resource "aws_route_table_association" "public" {
-  count = length(var.subnet_cidr.services_subnets.public)
+  count          = length(var.subnet_cidr.services_subnets.public)
   subnet_id      = element(aws_subnet.public.*.id, count.index)
   route_table_id = aws_route_table.public.id
 }
