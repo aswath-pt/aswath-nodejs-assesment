@@ -126,3 +126,33 @@ variable "custom_domain_name" {
   description = "Custom domain for fetching ACM certs"
   type        = string
 }
+
+variable "block_public_acls" {
+    type = bool
+    description = "If set to true, blocks new public ACLs and uploading public objects in the S3 bucket."
+}
+
+variable "block_public_policy" {
+    type = bool
+    description = "If set to true, blocks new public bucket policies for the S3 bucket."
+}
+
+variable "ignore_public_acls" {
+    type = bool
+    description = "If set to true, causes S3 to ignore all public ACLs on the S3 bucket and any objects that it contains."
+}
+
+variable "restrict_public_buckets" {
+    type = bool
+    description = "If set to true, restricts public bucket policies for the S3 bucket."
+}
+
+variable "enable_versioning" {
+    description = "If set to true, enables versioning for the S3 bucket. Versioning allows you to preserve, retrieve, and restore every version of every object in your bucket."
+}
+
+variable "enable_encryption" {
+    type = bool
+    default = true
+    description = "If set to true, enables server-side encryption for the S3 bucket using AWS S3-managed keys (SSE-S3)."
+}

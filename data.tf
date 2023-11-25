@@ -1,6 +1,3 @@
-
-
-
 # Use the aws_ami data source to fetch the Amazon Linux AMI ID
 data "aws_ami" "amazon_linux" {
   owners      = ["amazon"]

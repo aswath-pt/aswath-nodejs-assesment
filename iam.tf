@@ -1,3 +1,4 @@
+#IAM AND SECURITY GROUPS
 # Create an IAM role and an instance profile for the EC2 instances
 resource "aws_iam_instance_profile" "ec2_profile" {
   name = "${local.resource_prefix}-ec2-profile"
@@ -23,11 +24,10 @@ resource "aws_iam_role" "ec2_role" {
 EOF
 }
 
+#tfsec:ignore:aws-iam-no-policy-wildcards
 resource "aws_iam_role_policy" "policy" {
   name = "${local.resource_prefix}-ec2-role-policies"
   role = aws_iam_role.ec2_role.id
-
-#tfsec:ignore:aws-iam-no-policy-wildcards
   policy = <<EOF
 {
   "Version": "2012-10-17",
