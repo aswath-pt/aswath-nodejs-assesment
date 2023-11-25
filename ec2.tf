@@ -25,6 +25,5 @@ module "compute" {
   target_grp_protocol             = var.target_grp_protocol
   alb_listner_port                = var.alb_listner_port
   alb_listner_protocol            = var.alb_listner_protocol
-  acm_arn                         = var.acm_arn
-
+  acm_arn                         = data.aws_acm_certificate.acm_ssl.arn
 }

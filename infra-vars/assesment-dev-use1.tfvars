@@ -1,8 +1,8 @@
 #Common Variables
 region   = "us-east-1"
 env      = "dev"
-repo     = "https://github.com/aswath-pt/node-js-sample.git"
-app_path = "node-js-sample"
+repo     = "https://github.com/aswath-pt/node-s3-upload.git"
+app_path = "node-s3-upload"
 
 
 #Networking

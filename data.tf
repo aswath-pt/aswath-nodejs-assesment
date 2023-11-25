@@ -14,6 +14,9 @@ data "template_file" "user_data" {
   vars = {
     repo     = var.repo
     app_path = var.app_path
+    region   = var.region
+    s3_name  = aws_s3_bucket.bucket.name
+    port     = var.target_grp_port
   }
 }
 
