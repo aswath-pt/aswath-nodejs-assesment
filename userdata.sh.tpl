@@ -1,5 +1,4 @@
 #!/bin/bash
-#Set Variables
 
 # Install dependencies
 sudo yum update

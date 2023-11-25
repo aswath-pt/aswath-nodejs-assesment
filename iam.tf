@@ -1,6 +1,11 @@
 # Create an IAM role and an instance profile for the EC2 instances
+resource "aws_iam_instance_profile" "ec2_profile" {
+  name = "${local.resource_prefix}-ec2-profile"
+  role = aws_iam_role.ec2_role.name
+}
+
 resource "aws_iam_role" "ec2_role" {
-  name = "${local.resource_prefix}-ec2-role"
+  name               = "${local.resource_prefix}-ec2-role"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
