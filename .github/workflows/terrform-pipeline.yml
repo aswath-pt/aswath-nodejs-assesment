@@ -11,10 +11,33 @@ env:
   TF_ACTION_WORKING_DIR: '.'
 
 jobs:
+  tfsec:
+    name: TFSEC QUALITY SCAN
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v3
+
+      - name: Run tfsec
+        uses: aquasecurity/tfsec-sarif-action@9a83b5c3524f825c020e356335855741fd02745f
+        with:
+          sarif_file: tfsec.sarif
+          
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+            # Path to SARIF file relative to the root of the repository
+            sarif_file: tfsec.sarif
+
   terraform_primary:
     name: 'Terraform - Primary region'
     runs-on: self-hosted
-
+    needs: tfsec
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v2
@@ -25,16 +48,17 @@ jobs:
 
       - name: 'Terraform Plan'
         id: plan
-        run: terraform plan --var-file=infra-vars/assesment-dev-use1.tfvars -no-color
+        run: terraform plan --var-file=infra-vars/assesment-dev-use1.tfvars
         continue-on-error: false
 
       - name: 'Terraform Apply'
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform plan --var-file=infra-vars/assesment-dev-use1.tfvars -no-color
-
+        run: terraform plan --var-file=infra-vars/assesment-dev-use1.tfvars
+        
   terraform_secondary:
     name: 'Terraform - Secondary region'
     runs-on: self-hosted
+    needs: terraform_primary
 
     steps:
       - name: 'Checkout'
@@ -50,9 +74,9 @@ jobs:
 
       - name: 'Terraform Plan'
         id: plan
-        run: terraform plan --var-file=sandbox.tfvars -no-color
+        run: terraform plan --var-file=infra-vars/assesment-dev-use2.tfvars
         continue-on-error: false
 
-      # - name: 'Terraform Apply'
-      #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      #   run: terraform apply -auto-approve -no-color
+      - name: 'Terraform Apply'
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform plan --var-file=infra-vars/assesment-dev-use2.tfvars
