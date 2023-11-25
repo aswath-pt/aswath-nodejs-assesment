@@ -3,7 +3,7 @@ region   = "us-east-1"
 env      = "dev"
 repo     = "https://github.com/aswath-pt/node-s3-upload.git"
 app_path = "node-s3-upload"
-
+app_name = "nodejs"
 
 #Networking
 vpc_cidr = "10.3.0.0/16"
