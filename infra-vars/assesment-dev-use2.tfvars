@@ -1,8 +1,9 @@
 #Common Variables
 region   = "us-east-2"
 env      = "dev"
-repo     = "https://github.com/aswath-pt/node-js-sample.git"
-app_path = "node-js-sample"
+repo     = "https://github.com/aswath-pt/node-s3-upload.git"
+app_path = "node-s3-upload"
+app_name = "nodejs"
 
 #Networking
 vpc_cidr = "10.5.0.0/16"
@@ -33,3 +34,11 @@ target_grp_protocol             = "HTTP"
 alb_listner_port                = 443
 alb_listner_protocol            = "HTTPS"
 custom_domain_name              = "*.assessnode.tech"
+
+#S3
+block_public_acls = true
+block_public_policy = true
+ignore_public_acls = true
+restrict_public_buckets = true
+enable_versioning = "Enabled"
+enable_encryption = true
