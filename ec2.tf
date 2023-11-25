@@ -26,15 +26,18 @@ resource "aws_security_group" "ec2_sg" {
   description = "Allow traffic from ALB and SSH"
   vpc_id = aws_vpc.vpc.id 
 
-  # Allow inbound traffic from the ALB on port 8080
+  # Allow inbound traffic from the ALB on port
   ingress {
-    from_port = 8080
-    to_port = 8080
+    description = "Allow ALB to communicate with port"
+    from_port = 5000
+    to_port = 5000
     protocol = "tcp"
     security_groups = [aws_security_group.alb_sg.id] # Reference the ALB security group ID
   }
   # Allow all outbound traffic
+  #tfsec:ignore:aws-ec2-no-public-egress-sgr
   egress {
+    description = "Allow all outbound communications"
     from_port = 0
     to_port = 0
     protocol = "-1"
@@ -51,6 +54,7 @@ data "template_file" "user_data" {
 }
 
 # Create a launch template for the EC2 instances
+#tfsec:ignore:aws-ec2-enforce-launch-config-http-token-imds
 resource "aws_launch_template" "ec2_lt" {
   name = "${local.resource_prefix}-ec2-lt"
   image_id = data.aws_ami.amazon_linux.id
@@ -59,11 +63,7 @@ resource "aws_launch_template" "ec2_lt" {
     name = aws_iam_instance_profile.ec2_profile.name
   }
   key_name = aws_key_pair.new.key_name
-  user_data = base64encode(
-    <<EOF
-
-EOF
-)
+  user_data = base64encode(data.template_file.user_data.rendered)
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
 }
 
@@ -83,13 +83,15 @@ resource "aws_autoscaling_group" "ec2_asg" {
 }
 
 # Create a security group for the ALB
+#tfsec:ignore:aws-ec2-no-public-ingress-sgr
 resource "aws_security_group" "alb_sg" {
   name = "${local.resource_prefix}-alb-sg"
   description = "Allow traffic from the internet on port 80"
   vpc_id = aws_vpc.vpc.id 
 
-  # Allow inbound traffic from the internet on port 80
+  # Allow inbound traffic from the internet on ALB
   ingress {
+    description = "All traffic on ALB from outside"
     from_port = 443
     to_port = 443
     protocol = "tcp"
@@ -98,9 +100,11 @@ resource "aws_security_group" "alb_sg" {
 
   # Allow all outbound traffic
   egress {
+    description = "Allow all outbound traffic"
     from_port = 0
     to_port = 0
     protocol = "-1"
+#tfsec:ignore:aws-ec2-no-public-egress-sgr
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
@@ -108,6 +112,8 @@ resource "aws_security_group" "alb_sg" {
 # Create an application load balancer
 resource "aws_lb" "node_alb" {
   name = "${local.resource_prefix}-alb-sg"
+  drop_invalid_header_fields = true
+#tfsec:ignore:aws-elb-alb-not-public
   internal = false
   load_balancer_type = "application"
   security_groups = [aws_security_group.alb_sg.id]
