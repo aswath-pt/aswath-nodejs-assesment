@@ -15,7 +15,7 @@ data "template_file" "user_data" {
     repo     = var.repo
     app_path = var.app_path
     region   = var.region
-    s3_name  = aws_s3_bucket.bucket.id
+    s3_name  = module.s3_bucket.bucket_id
     port     = var.target_grp_port
   }
 }
@@ -23,8 +23,4 @@ data "template_file" "user_data" {
 data "aws_acm_certificate" "acm_ssl" {
   domain = var.custom_domain_name
   types  = ["AMAZON_ISSUED"]
-}
-
-output "s3" {
-  value = aws_s3_bucket.bucket.id
 }

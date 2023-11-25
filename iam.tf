@@ -35,7 +35,7 @@ resource "aws_iam_role_policy" "policy" {
     {
       "Effect": "Allow",
       "Action": ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"],
-      "Resource": ["${aws_s3_bucket.bucket.arn}/*"]
+      "Resource": ["${module.s3_bucket.bucket_id}/*"]
     },
     {
       "Effect": "Allow",
@@ -50,7 +50,7 @@ resource "aws_iam_role_policy" "policy" {
                 "kms:GenerateDataKey"
             ],
             "Effect": "Allow",
-            "Resource": "${aws_kms_key.mykey.arn}"
+            "Resource": "${module.s3_bucket.s3_kms}"
         }
   ]
 }

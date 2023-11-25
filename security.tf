@@ -30,7 +30,6 @@ resource "aws_security_group" "alb_sg" {
   name        = "${local.resource_prefix}-alb-sg"
   description = "Allow traffic from the internet on port 80"
   vpc_id      = module.networking.vpc_id
-
   # Allow inbound traffic from the internet on ALB
   ingress {
     description = "All traffic on ALB from outside"
