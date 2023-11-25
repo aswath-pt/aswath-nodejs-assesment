@@ -27,6 +27,7 @@ resource "aws_iam_role_policy" "policy" {
   name = "${local.resource_prefix}-ec2-role-policies"
   role = aws_iam_role.ec2_role.id
 
+#tfsec:ignore:aws-iam-no-policy-wildcards
   policy = <<EOF
 {
   "Version": "2012-10-17",

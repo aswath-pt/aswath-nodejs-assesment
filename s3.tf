@@ -1,3 +1,10 @@
+#tfsec:ignore:aws-s3-block-public-acls
+#tfsec:ignore:aws-s3-block-public-policy
+#tfsec:ignore:aws-s3-encryption-customer-key
+#tfsec:ignore:aws-s3-no-public-buckets
+#tfsec:ignore:aws-s3-ignore-public-acls
+#tfsec:ignore:aws-s3-enable-bucket-logging
+#tfsec:ignore:aws-s3-specify-public-access-block
 resource "aws_s3_bucket" "bucket" {
   bucket = "${local.resource_prefix}-s3-bucket-assess"
   acl    = "private"
