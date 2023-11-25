@@ -53,7 +53,7 @@ jobs:
 
       - name: 'Terraform Apply'
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform plan --var-file=infra-vars/assesment-dev-use1.tfvars
+        run: terraform apply --var-file=infra-vars/assesment-dev-use1.tfvars -auto-approve
         
   # terraform_secondary:
   #   name: 'Terraform - Secondary region'
