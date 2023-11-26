@@ -92,3 +92,10 @@ Post infrastructure is deployed successfully access the web application using
 URL: s3upload.assessnode.tech
 
 [Access the WEB Application](https://s3upload.assessnode.tech).
+
+
+
+### Improvements that can be done
+
+- Application can be deployed to autoscaling group using aws codedeploy and docker
+- Instead of EC2 we can provision EKS and deploy the application using helm charts 
