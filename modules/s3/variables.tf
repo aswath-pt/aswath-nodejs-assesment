@@ -19,6 +19,7 @@ variable "restrict_public_buckets" {
     type = bool
 }
 variable "enable_versioning" {
+  default = "Enabled"
 }
 variable "enable_encryption" {
   type = bool
