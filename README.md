@@ -1,5 +1,7 @@
 # AWS INFRASTRUCTURE & NODE JS APPLICATION DEPLOYMENT USING TERRAFORM 
 [![Terraform Checks](https://github.com/aswath-pt/aswath-nodejs-assesment/actions/workflows/terrform-pipeline.yml/badge.svg)](https://github.com/aswath-pt/aswath-nodejs-assesment/actions/workflows/terrform-pipeline.yml)
+
+![Architecture](https://github.com/aswath-pt/nodetest/blob/master/Aswath_architecture.jpg)
 ## Code Fixes and feature adding
 ```
 - Clone the repository and create a sandbox branch sandbox-<name>-<feature>
