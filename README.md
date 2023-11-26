@@ -79,6 +79,14 @@ terraform init --backend-config=backend-vars/backend-<env>-<region>.tfvars
 terraform plan --var-file=infra-vars/assesment-<env>-<region>.tfvars
 terraform apply --var-file=infra-vars/assesment-<env>-<region>.tfvars
 ```
+### Nodejs WEB application
 
+Git Repo for Application code: https://github.com/aswath-pt/node-s3-upload.git
 
+Web application will allow user to upload files in s3 via browser
 
+Post infrastructure is deployed successfully access the web application using
+
+URL: s3upload.assessnode.tech
+
+[Access the WEB Application](https://s3upload.assessnode.tech).
